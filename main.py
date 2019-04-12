@@ -5,6 +5,7 @@ m_a = LargeMotor(OUTPUT_A)
 m_b = LargeMotor(OUTPUT_B)
 m_c = MediumMotor(OUTPUT_C)
 m_c.position = 0
+m_a.position = 0
 
 
 
@@ -27,6 +28,23 @@ def motorsControll(command):
         m_a.run_timed(time_sp=400, speed_sp=-250, stop_action='coast')
     elif (command == 'right'):
         m_a.run_timed(time_sp=400, speed_sp=250, stop_action='coast')
+    elif(command == 'calibration'):
+        motorsControll('up')
+        m_b.wait_while('running')
+        if (m_b.is_holding):
+            p = m_a.position
+            l = p - 1
+            while(1):
+                l = m_a.position
+                m_a.run_timed(time_sp=100 , speed_sp=-100, stop_action='coast')
+                m_a.wait_while('running')
+                p = m_a.position
+                if (l == p and p!=0):
+                    break
+            if not (m_a.is_running):
+                motorsControll('down')
+                print('Calibration was successful')
+
 
 def getch():
     #Returns a single character from standard input
@@ -41,9 +59,9 @@ def getch():
     return ch
 
 
-
 motorsReset()
 log = 0
+motorsControll('calibration')
 while (1):
     pressedKey = getch()
 
