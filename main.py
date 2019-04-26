@@ -45,13 +45,14 @@ def motorsControll(command):
 
 def pointControll(fPos):
     key = int(fPos - ctPos)
-    speed = (1 if key > 0 else -1) * 250
+    speed = (1 if key > 0 else -1) * 62
     key = abs(key)
     while(key):
-        m_a.run_timed(time_sp=400, speed_sp=speed, stop_action='hold')
+        m_a.run_timed(time_sp=1600, speed_sp=speed, stop_action='hold')
         m_a.wait_while('running')
         if not (m_a.is_running):
             key = key - 1
+            time.sleep(1)
 
 
 
@@ -73,27 +74,34 @@ def getch():
 motorsReset()
 log = 0
 motorsControll('calibration')
-while (1):
-    pressedKey = getch()
-    if pressedKey == '1': pointControll(1)
-    if pressedKey == '2': pointControll(2)
-    if pressedKey == '3': pointControll(3)
-    if pressedKey == '4': pointControll(4)
-    if pressedKey == '5': pointControll(-1)
-    if pressedKey == '6': pointControll(-2)
-    if pressedKey == '7': pointControll(-3)
-    if pressedKey == '8': pointControll(-4)
+i = 0
+while (i < 6):
+    pointControll(-1)
+    i+=1
 
-
-    if pressedKey == 'w': motorsControll('up')
-    if pressedKey == 's': motorsControll('down')
-    if pressedKey == ' ':
-        if (log == 0):
-            motorsControll('take')
-            log = 1
-        else:
-            motorsControll('drop')
-            log = 0
-    if pressedKey == 'q': break
-
-motorsReset()
+# while (1):
+#     # pressedKey = getch()
+#     pressedKey = input()
+#     if pressedKey == '1': pointControll(1)
+#     if pressedKey == '2': pointControll(2)
+#     if pressedKey == '3': pointControll(3)
+#     if pressedKey == '4': pointControll(4)
+#     if pressedKey == '5': pointControll(-1)
+#     if pressedKey == '6': pointControll(-2)
+#     if pressedKey == '7': pointControll(-3)
+#     if pressedKey == '8': pointControll(-4)
+#
+#
+#
+#     if pressedKey == 'w': motorsControll('up')
+#     if pressedKey == 's': motorsControll('down')
+#     if pressedKey == ' ':
+#         if (log == 0):
+#             motorsControll('take')
+#             log = 1
+#         else:
+#             motorsControll('drop')
+#             log = 0
+#     if pressedKey == 'q': break
+#
+# motorsReset()
