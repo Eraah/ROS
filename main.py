@@ -14,6 +14,7 @@ step = 90
 ki = 0.01
 kd = 0.01
 kp = 2
+gl_e = 0
 
 
 def motorsReset():
@@ -39,51 +40,55 @@ def motorsControll(command):
         motorsControll('up')
         m_b.wait_while('running')
         if (m_b.is_holding):
-            while(1):
-                m_a.run_timed(time_sp=100, speed_sp=100, stop_action='hold')
-                m_a.wait_while('running' )
-                if (controller.is_pressed):
-                    m_a.stop(stop_action='coast')
-                    break
-            if not (m_a.is_running):
-                m_a.position = 0
-                print('Calibration was successful')
+            m_a.position = 0
+            # while(1):
+            #     m_a.run_timed(time_sp=100, speed_sp=100, stop_action='hold')
+            #     m_a.wait_while('running' )
+            #     if (controller.is_pressed):
+            #         m_a.stop(stop_action='coast')
+            #         break
+            # if not (m_a.is_running):
+            #     m_a.position = 0
+            #     print('Calibration was successful')
 
 def pointControll(fPos):
     global ctPos
+    global gl_e
     key = int(fPos - ctPos)
     sign = (1 if key > 0 else -1)
     key = abs(key)
-    ctPos = ctPos + fPos
+    ctPos = fPos
+    fAng = step * sign + m_a.position - gl_e
     while(key):
         i = 0
-        fAng = step * sign + m_a.position
         dPr = 0
         while (1):
             e = fAng - m_a.position
             i = i + ki * e
             d = kd * (e - dPr)
             u = (kp * e + i + d)
-            if (u > 40):
-                u = 40
-            if (u < -40):
-                u = -40
-            if (u > 1 and u < 7):
-                u = 7
-            if (u > -7 and u < -1):
-                u = -7
+            if (u > 25):
+                u = 25
+            if (u < -25):
+                u = -25
+            if (u < 20 and u > 0):
+                u = 20
+            if (u > -20 and u < 0):
+                u = -20
             m_a.run_direct(duty_cycle_sp=u)
             dPr = e
             time.sleep(0.01)
-            print(m_a.position)
             if ((m_a.position - fAng < 3) and ((m_a.position - fAng > -3))):
                 m_a.stop(stop_action='hold')
-                break
-        print('finish')
+                m_a.wait_while('running')
+                if (m_a.is_holding):
+                    break
+        print('m_a pos')
+        print(m_a.position)
         key = key - 1
         time.sleep(1)
-    print(ctPos)
-
+        gl_e = m_a.position - fAng
+        fAng = step * sign + m_a.position - gl_e
 
 def getch():
     #Returns a single character from standard input
@@ -102,6 +107,7 @@ def getch():
 
 motorsReset()
 log = 0
+
 motorsControll('calibration')
 
 while (1):
