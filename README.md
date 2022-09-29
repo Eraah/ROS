@@ -11,4 +11,4 @@
   
 <p>В работе используем микроконтроллер EV3, манипулятор из лего, компьютерное зрение реализуем с помощью библиотеки Open CV, нейросеть реализуем с помощью библиотеки TensorFlow, обучение будем проводить в GoogleColab.</p>
 
-<p>Промежуточный отчет доступен по [ссылке]https://trello.com/1/cards/5cb45823de943d5f448b1ab4/attachments/5cb45864a0a82f1361f1e442/download/Manipulator_report.pdf.</p>
+<p>Промежуточный отчет доступен по [ссылке][https://trello.com/1/cards/5cb45823de943d5f448b1ab4/attachments/5cb45864a0a82f1361f1e442/download/Manipulator_report.pdf].</p>
